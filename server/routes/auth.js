@@ -2,8 +2,9 @@ const router = require('express').Router();
 const {User} = require('../models/user');
 const joi = require('joi');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-router.post('/', async (req, next) =>{
+router.post('/', async (req, res) =>{
     try {
         const {error} = validate(req.body);
         if (error) return res.status(400).send({message:error.det[0].message});
@@ -14,9 +15,10 @@ router.post('/', async (req, next) =>{
         const validPassword = await bcrypt.compare(req.body.password, user.password);
         if (!validPassword) return res.status(401).send({message:"Invalid Email or Password"});
 
-        const token = user.generateAuthToken();
+        const token = jwt.sign({_id:user._id}, process.env.JWT_KEY);
+       // res.header('auth-token', token).send(token)
         res.status(200).send({data:token, message:"Logged in successfully"});
-    } catch (error) {
+    } catch (err) {
         res.status(500).send({message:"Internal Server Error"});
     }
 });

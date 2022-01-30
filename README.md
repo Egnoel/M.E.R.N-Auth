@@ -12,3 +12,5 @@
 7. Register route using validate function and hashing the password, verification of email. All in post method (router.post())
 8. Login Route, validating the fields and generating a token
 9. Import the routes to the index file, app.use("api route", route).
+10. Create React App, importing BrowserRouter in index
+11. Create page components and handle the url from the backend
